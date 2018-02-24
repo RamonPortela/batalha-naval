@@ -9,13 +9,30 @@ socket_servidor.bind((host, porta))
 socket_servidor.listen()
 print("esperando jogadores...")
 
+msgAguardando = "Aguardando outro jogador..."
+msgIniciando = "Iniciando partida!"
+
+jogadorUm = 1
+jogadorDois = 2
+socket = 0
+addr = 1
+ip = 0
+porta = 1
+navios = []
+
 jogadores = {}
 
-jogadorId = 1
+def esperaConexao(idJogador):
+    socket_jogador, addr_jogador = socket_servidor.accept()
+    jogadores[idJogador] = (socket_jogador, addr_jogador, Jogador(idJogador))
+    jogadores[idJogador][socket].send(msgAguardando.encode('ascii'))
+    print('conexão recebida do ip: ' + jogadores[idJogador][addr][ip] + ':' + str(jogadores[idJogador][addr][porta]))
 
-socket_jogador, addr_jogador = socket_servidor.accept()
+esperaConexao(jogadorUm)
+esperaConexao(jogadorDois)
 
-jogadores[jogadorId] = (socket_jogador, addr_jogador, Jogador(jogadorId))
-jogadores[1][0].send('oi do servidor'.encode('ascii'))
+print("Preparando para iniciar a partida")
 
-print(jogadores)
+for jogador in jogadores.values():
+    jogador[socket].send(msgIniciando.encode('ascii'))
+

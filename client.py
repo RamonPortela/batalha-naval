@@ -1,13 +1,7 @@
 import socket
+from navio import Navio
 
-# Cria o socket
 tiros = {}
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
-s.connect(('localhost', 12397))
-
-msg=s.recv(1024)
-print(msg.decode('ascii'))
 
 def validarEntrada(entrada):
     return entrada < 0 and entrada > 9
@@ -63,3 +57,13 @@ def posicionarBarco(nome, tamanho):
         else:
             print('Entrada incorreta tente novamente.')
     return (linha, coluna, direcao)
+
+
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+s.connect(('localhost', 12397))
+
+msg=s.recv(1024)
+print(msg.decode('ascii'))
+
+msg=s.recv(1024)
+print(msg.decode('ascii'))
