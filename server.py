@@ -13,6 +13,9 @@ jogadores = {}
 
 jogadorId = 1
 
-jogadores[jogadorId] = (socket_servidor.accept(), Jogador(jogadorId))
+socket_jogador, addr_jogador = socket_servidor.accept()
+
+jogadores[jogadorId] = (socket_jogador, addr_jogador, Jogador(jogadorId))
+jogadores[1][0].send('oi do servidor'.encode('ascii'))
 
 print(jogadores)
