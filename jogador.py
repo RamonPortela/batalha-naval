@@ -19,7 +19,7 @@ class Jogador:
             if(coluna + tamanho > 10):
                 return False
             while tamanho > 0:
-                self.campo[linha][coluna] = 1
+                self.campo[int(linha)][int(coluna)] = 1
                 tamanho = tamanho - 1
                 coluna = coluna + 1
         else:
