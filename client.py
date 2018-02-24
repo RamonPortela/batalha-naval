@@ -10,10 +10,7 @@ msg=s.recv(1024)
 print(msg.decode('ascii'))
 
 def validarEntrada(entrada):
-    if entrada < 0 and entrada > 9:
-        return True
-    else:
-        return False
+    return entrada < 0 and entrada > 9
 
 def atirar():
     while True:

@@ -19,13 +19,17 @@ class Jogador:
             if(coluna + tamanho > 10):
                 return False
             while tamanho > 0:
-                self.campo[int(linha)][int(coluna)] = 1
+                if self.campo[linha][coluna] == 1:
+                    return False
+                self.campo[linha][coluna] = 1
                 tamanho = tamanho - 1
                 coluna = coluna + 1
         else:
             if(linha + tamanho > 10):
                 return False
             while tamanho > 0:
+                if self.campo[linha][coluna] == 1:
+                    return False
                 self.campo[linha][coluna] = 1
                 linha = linha + 1
                 tamanho = tamanho - 1
