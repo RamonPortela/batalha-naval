@@ -30,10 +30,3 @@ class Jogador:
                 linha = linha + 1
                 tamanho = tamanho - 1
         return True
-
-    def atirar(self):
-        linha = -1
-        while True:
-            linha = input('Insira a linha que deseja atirar')
-            if linha < 0 and linha > 9:
-                break

@@ -18,6 +18,7 @@ socket = 0
 addr = 1
 ip = 0
 porta = 1
+navios = []
 
 jogadores = {}
 
