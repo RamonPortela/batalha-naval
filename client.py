@@ -1,5 +1,6 @@
 import socket
 from navio import Navio
+import time
 
 tiros = {}
 
@@ -70,3 +71,7 @@ print(msg.decode('ascii'))
 
 msg=s.recv(1024)
 print(msg.decode('ascii'))
+
+for i in range(1, 10):
+    s.send(str(i).encode('ascii'))
+    #time.sleep(1)
