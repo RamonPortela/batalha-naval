@@ -1,4 +1,4 @@
-from modelo.navio import Navio
+from .main.navio import Navio
 
 n = Navio('teste', 3)
 
