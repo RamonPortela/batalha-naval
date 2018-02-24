@@ -1,4 +1,5 @@
 class Navio:
-    def __init__(self, nome, tamanho):
+    def __init__(self, nome, tamanho, direcao):
         self.nome = nome
         self.tamanho = tamanho
+        self.direcao = direcao

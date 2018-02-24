@@ -19,6 +19,7 @@ jogadorUm = 1
 jogadorDois = 2
 socket = 0
 addr = 1
+jogador = 2
 ip = 0
 porta = 1
 navios = []
@@ -31,12 +32,11 @@ def esperaConexao(idJogador):
     jogadores[idJogador][socket].send(msgAguardando.encode('ascii'))
     print('conexão recebida do ip: ' + jogadores[idJogador][addr][ip] + ':' + str(jogadores[idJogador][addr][porta]))
 
-def esperarCriacaoNavios(idJogador):
-    for i in range(1, 10):
-        msg = jogadores[idJogador][socket].recv(1024)
-        decodedMsg = msg.decode('ascii')
-        print(decodedMsg)
-        navios.append(decodedMsg + ' jogador: ' + str(idJogador))
+def esperarCriacaoNavios(tupla):
+    print(tupla)
+    #idJogador = int(tupla[0])
+    while len(jogadores[tupla][jogador].navios) != 10:
+        pass
 
 esperaConexao(jogadorUm)
 esperaConexao(jogadorDois)
@@ -52,7 +52,5 @@ t2 = Thread(target=esperarCriacaoNavios, args=(jogadorDois,))
 t1.start()
 t2.start()
 
-while len(navios) != 18:
-    time.sleep(0.5)
 
 print(navios)
