@@ -7,3 +7,6 @@ s.connect(('localhost', 12397))
 
 msg=s.recv(1024)
 print(msg.decode('ascii'))
+
+msg=s.recv(1024)
+print(msg.decode('ascii'))
