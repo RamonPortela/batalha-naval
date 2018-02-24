@@ -3,14 +3,37 @@ from navio import Navio
 import time
 
 tiros = {}
-
-def validarEntrada(entrada):
-    if entrada < 0 and entrada > 9:
-        return True
-    else:
-        return False
+matriz = [[0] * 10] * 10
 
 def atirar():
+    tupla = executarTiro()
+    s.send(tupla)
+    msg = s.recv(1024)
+    #tem que converter
+    
+    if msg == 'acertou':
+        matriz[tupla[0]][tupla[1]] = 'X'
+        print("Opa fion, acertou")
+    elif msg == "errou":
+        matriz[tupla[0]][tupla[1]] = '~'
+        print("Errou!!!!")
+    else:
+        print("winner winner chicken dinner")
+
+    desenharMatriz()
+
+def desenharMatriz():
+    print("\t", range(0, 9))
+    x = 0
+    for linha in matriz:
+        print(x, linha)
+        x+=1
+
+
+def validarEntrada(entrada):
+    return entrada < 0 and entrada > 9
+
+def executarTiro():
     while True:
         linha = -1
         coluna = -1
@@ -63,10 +86,11 @@ def posicionarBarco(nome, tamanho):
     return (linha, coluna, direcao)
 
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect(('localhost', 12397))
 
 msg=s.recv(1024)
+<<<<<<< HEAD
 print(msg.decode('ascii'))
 
 msg=s.recv(1024)
@@ -75,3 +99,6 @@ print(msg.decode('ascii'))
 for i in range(1, 10):
     s.send(str(i).encode('ascii'))
     #time.sleep(1)
+=======
+print(msg.decode('ascii'))
+>>>>>>> c60c34839ab103f15758da7de9181ad7eb5d64db
