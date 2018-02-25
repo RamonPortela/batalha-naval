@@ -9,7 +9,7 @@ class Jogador:
 
 
     def verificarSeTiroAcertou(self, linha, coluna):
-        if(self.campo[linha][coluna] == 1):
+        if(self.campo[linha][coluna] == 1):            
             return True
         else:
             return False

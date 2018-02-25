@@ -44,17 +44,38 @@ def esperarCriacaoNavios(idJogador):
         if posicaoValida:
             jogadores[idJogador][jogador].navios.append(navio)
 
-        jogadores[idJogador][socket].send(pickle.dumps(posicaoValida))
+        enviarMensagemParaJogador(idJogador, posicaoValida)
     
     enviarMensagemParaJogador(idJogador, msgAguardandoNavios)
     print("Jogador " + str(idJogador) + " terminou de posicionar os navios.")
 
 def enviarMensagemParaAmbosJogadores(mensagem):
-    for j in jogadores.values():
-        j[socket].send(mensagem.encode('ascii'))
+    if type(mensagem) is str:
+        for j in jogadores.values():
+            j[socket].send(mensagem.encode('ascii'))
+    else:
+        for j in jogadores.values():
+            msgBytes = pickle.dumps(mensagem)
+            j[socket].send(msgBytes)
 
 def enviarMensagemParaJogador(idJogador, mensagem):
-    jogadores[idJogador][socket].send(mensagem.encode('ascii'))
+    if type(mensagem) is str:
+        jogadores[idJogador][socket].send(mensagem.encode('ascii'))
+    else:
+        msgBytes = pickle.dumps(mensagem)
+        jogadores[idJogador][socket].send(msgBytes)
+
+def executarRodada(idJogadorVez, idJogadorEsperando):
+    enviarMensagemParaJogador(idJogadorVez, True)
+    enviarMensagemParaJogador(idJogadorEsperando, False)
+    envioJogador = jogadores[idJogadorVez][socket].recv(tamanhoResposta)
+    linha, coluna = pickle.loads(envioJogador)
+    acertou = jogadores[idJogadorVez].verificarSeTiroAcertou(linha, coluna)
+
+    if acertou:
+        enviarMensagemParaAmbosJogadores(True)
+    else:
+        enviarMensagemParaAmbosJogadores(False)
 
 esperaConexao(jogadorUm)
 esperaConexao(jogadorDois)
@@ -80,18 +101,11 @@ envioJogador = None
 
 while True:
     if turno == jogadorUm:
-        jogadores[jogadorUm][socket].send(pickle.dumps(True))
-        jogadores[jogadorDois][socket].send(pickle.dumps(False))
-        envioJogador = jogadores[jogadorUm][socket].recv(tamanhoResposta)
+        executarRodada(jogadorUm, jogadorDois)
         turno = jogadorDois
     else:
-        jogadores[jogadorUm][socket].send(pickle.dumps(False))
-        jogadores[jogadorDois][socket].send(pickle.dumps(True))
-        envioJogador = jogadores[jogadorDois][socket].recv(tamanhoResposta)
+        executarRodada(jogadorDois, jogadorUm)
         turno = jogadorUm
-
-
-
 
 jogadores[jogadorUm][socket].close()
 jogadores[jogadorDois][socket].close()

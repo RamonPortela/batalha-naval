@@ -20,25 +20,6 @@ def desenharMatriz():
         print(x, "|", ' '.join([str(a) for a in linha]))
         x+=1
 
-def atirar():
-    tupla = executarTiro()
-    s.send(tupla)
-    msg = s.recv(tamanhoResposta)
-    #tem que converter
-    
-    if msg == 'acertou':
-        matriz[tupla[0]][tupla[1]] = 'X'
-        print("Opa fion, acertou")
-    elif msg == "errou":
-        matriz[tupla[0]][tupla[1]] = '~'
-        print("Errou!!!!")
-    else:
-        print("winner winner chicken dinner")
-
-    desenharMatriz()
-
-
-
 def validarEntrada(entrada):
     return entrada >= 0 and entrada <= 9
 
@@ -108,6 +89,7 @@ def executarPosicionarBarco(navio):
 
 def ReceberEPrintarMensagem():
     msg=s.recv(tamanhoResposta)
+    print(msg)
     print(msg.decode('ascii'))
 
 
@@ -122,8 +104,8 @@ for i in range(0, 10):
         posicao = executarPosicionarBarco(navios[i])
         b = pickle.dumps(posicao)
         s.send(b)
-        respota = s.recv(tamanhoResposta)
-        posicaoValida = pickle.loads(respota)
+        resposta = s.recv(tamanhoResposta)
+        posicaoValida = pickle.loads(resposta)
         if posicaoValida:
             break
         else:
@@ -133,10 +115,26 @@ ReceberEPrintarMensagem()
 ReceberEPrintarMensagem()
 
 while True:
-    respota = s.recv(tamanhoResposta)
-    minhaVez = pickle.loads(respota)
+    resposta = s.recv(tamanhoResposta)
+    minhaVez = pickle.loads(resposta)
     if minhaVez:
         print(msgSuaVez)
+        tupla = executarTiro()
+        envio = pickle.dumps(tupla)
+        s.send(envio)
+        resposta = s.recv(tamanhoResposta)
+        msg = resposta.decode('ascii')
+        if msg == 'acertou':
+            matriz[tupla[0]][tupla[1]] = 'X'
+            print("Opa fion, acertou")
+        else:
+            matriz[tupla[0]][tupla[1]] = '~'
+            print("Errou!!!!")
+
+        desenharMatriz()
+
+        respostaVencedor = s.recv(tamanhoResposta)
+        vencedor = pickle.loads(respostaVencedor)
     else:
         print(msgAguardeVez)
 
