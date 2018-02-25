@@ -3,7 +3,7 @@ class Jogador:
     def __init__(self, id):
         self.id = id
         self.navios = []
-        self.campo = [[0] * 10] * 10
+        self.campo = [[0 for x in range(10)] for y in range(10)]
         self.tiros = []
         self.naviosAbatidos = []
 
@@ -16,7 +16,7 @@ class Jogador:
 
     def setNavioInCampo(self, linha, coluna, direcao, tamanho):
         if(direcao == 'h'):
-            if(coluna + tamanho > 10):
+            if(coluna + tamanho > 9):
                 return False
             while tamanho > 0:
                 if self.campo[linha][coluna] == 1:
@@ -25,7 +25,7 @@ class Jogador:
                 tamanho = tamanho - 1
                 coluna = coluna + 1
         else:
-            if(linha + tamanho > 10):
+            if(linha + tamanho > 9):
                 return False
             while tamanho > 0:
                 if self.campo[linha][coluna] == 1:
