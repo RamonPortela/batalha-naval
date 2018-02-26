@@ -99,7 +99,7 @@ s.connect(('localhost', 12397))
 ReceberEPrintarMensagem()
 ReceberEPrintarMensagem()
 
-for i in range(0, 10):
+for i in range(0, 1):
     while True:
         posicao = executarPosicionarBarco(navios[i])
         b = pickle.dumps(posicao)
@@ -123,20 +123,25 @@ while True:
         envio = pickle.dumps(tupla)
         s.send(envio)
         resposta = s.recv(tamanhoResposta)
-        msg = resposta.decode('ascii')
-        if msg == 'acertou':
-            matriz[tupla[0]][tupla[1]] = 'X'
+        acertou, linha, coluna = pickle.loads(resposta)
+        if acertou:
+            matriz[linha][coluna] = 'X'
             print("Opa fion, acertou")
         else:
-            matriz[tupla[0]][tupla[1]] = '~'
+            matriz[linha][coluna] = '~'
             print("Errou!!!!")
 
         desenharMatriz()
-
-        respostaVencedor = s.recv(tamanhoResposta)
-        vencedor = pickle.loads(respostaVencedor)
     else:
         print(msgAguardeVez)
+        resposta = s.recv(tamanhoResposta)
+        print(resposta)
+        acertou, linha, coluna = pickle.loads(resposta)
+        if acertou:
+            print('Seu adversário acertou seu navio na posição: ' + str(linha) + ', ' + str(coluna))
+        else:
+            print('Seu adversário disparou na água na posição: ' + str(linha) + ', ' + str(coluna))
+
+    #receber resposta se acabou
 
 s.close()
-

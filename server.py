@@ -37,7 +37,7 @@ def esperaConexao(idJogador):
     print('conexão recebida do ip: ' + jogadores[idJogador][addr][ip] + ':' + str(jogadores[idJogador][addr][porta]))
 
 def esperarCriacaoNavios(idJogador):
-    while len(jogadores[idJogador][jogador].navios) < totalNaviosPorJogador:
+    while len(jogadores[idJogador][jogador].navios) < 1:
         b = jogadores[idJogador][socket].recv(tamanhoResposta)
         linha, coluna, navio = pickle.loads(b)
         posicaoValida = jogadores[idJogador][jogador].setNavioInCampo(linha, coluna, navio.direcao, navio.tamanho)
@@ -70,12 +70,12 @@ def executarRodada(idJogadorVez, idJogadorEsperando):
     enviarMensagemParaJogador(idJogadorEsperando, False)
     envioJogador = jogadores[idJogadorVez][socket].recv(tamanhoResposta)
     linha, coluna = pickle.loads(envioJogador)
-    acertou = jogadores[idJogadorVez].verificarSeTiroAcertou(linha, coluna)
-
+    acertou = jogadores[idJogadorEsperando][jogador].verificarSeTiroAcertou(linha, coluna)
+    print(acertou)
     if acertou:
-        enviarMensagemParaAmbosJogadores(True)
+        enviarMensagemParaAmbosJogadores((True, linha, coluna))
     else:
-        enviarMensagemParaAmbosJogadores(False)
+        enviarMensagemParaAmbosJogadores((False, linha, coluna))
 
 esperaConexao(jogadorUm)
 esperaConexao(jogadorDois)
@@ -106,6 +106,8 @@ while True:
     else:
         executarRodada(jogadorDois, jogadorUm)
         turno = jogadorUm
+
+    #verificar se há vencedor
 
 jogadores[jogadorUm][socket].close()
 jogadores[jogadorDois][socket].close()
