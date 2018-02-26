@@ -10,7 +10,7 @@ tamanhoResposta = 1024
 msgSuaVez = "Sua vez de jogar"
 msgAguardeVez = "Aguarde sua rodada"
 
-navios = {0: Navio('Porta-Avião', 5, None), 1: Navio('Navio-Tanque', 4, None), 2: Navio('Navio-Tanque', 4, None), 3: Navio('Contra Torpedeiro', 3, None), 4: Navio('Contra Torpedeiro', 3, None), 5: Navio('Contra Torpedeiro', 3, None), 6: Navio('Submarino', 2, None), 7: Navio('Submarino', 2, None), 8: Navio('Submarino', 2, None), 9: Navio('Submarino', 2, None)}
+navios = {0: Navio('Porta-Avião', 1, None), 1: Navio('Navio-Tanque', 4, None), 2: Navio('Navio-Tanque', 4, None), 3: Navio('Contra Torpedeiro', 3, None), 4: Navio('Contra Torpedeiro', 3, None), 5: Navio('Contra Torpedeiro', 3, None), 6: Navio('Submarino', 2, None), 7: Navio('Submarino', 2, None), 8: Navio('Submarino', 2, None), 9: Navio('Submarino', 2, None)}
 
 def desenharMatriz():
     print("   ", " ".join([str(a) for a in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]))
@@ -116,7 +116,7 @@ ReceberEPrintarMensagem()
 
 while True:
     resposta = s.recv(tamanhoResposta)
-    minhaVez = pickle.loads(resposta)
+    minhaVez = pickle.loads(resposta)    
     if minhaVez:
         print(msgSuaVez)
         tupla = executarTiro()
@@ -135,13 +135,23 @@ while True:
     else:
         print(msgAguardeVez)
         resposta = s.recv(tamanhoResposta)
-        print(resposta)
         acertou, linha, coluna = pickle.loads(resposta)
         if acertou:
             print('Seu adversário acertou seu navio na posição: ' + str(linha) + ', ' + str(coluna))
         else:
             print('Seu adversário disparou na água na posição: ' + str(linha) + ', ' + str(coluna))
 
-    #receber resposta se acabou
+    resposta = s.recv(tamanhoResposta)    
+    estadoJogo, ganhador = pickle.loads(resposta)
+
+    if estadoJogo == True:
+        if ganhador:
+            print("chicken chicken winner dinner")
+            break
+        else:
+            print("Seu adversário ganhou a partida.")
+            break
+    else:
+        s.send("continua ai".encode('ascii'))
 
 s.close()

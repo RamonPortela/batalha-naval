@@ -25,8 +25,9 @@ addr = 1
 jogador = 2
 ip = 0
 porta = 1
-totalNaviosPorJogador = 10
+totalNaviosPorJogador = 1
 tamanhoResposta = 1024
+acertosNecessarios = 1
 
 jogadores = {}
 
@@ -37,7 +38,7 @@ def esperaConexao(idJogador):
     print('conexão recebida do ip: ' + jogadores[idJogador][addr][ip] + ':' + str(jogadores[idJogador][addr][porta]))
 
 def esperarCriacaoNavios(idJogador):
-    while len(jogadores[idJogador][jogador].navios) < 1:
+    while len(jogadores[idJogador][jogador].navios) < totalNaviosPorJogador:
         b = jogadores[idJogador][socket].recv(tamanhoResposta)
         linha, coluna, navio = pickle.loads(b)
         posicaoValida = jogadores[idJogador][jogador].setNavioInCampo(linha, coluna, navio.direcao, navio.tamanho)
@@ -71,11 +72,13 @@ def executarRodada(idJogadorVez, idJogadorEsperando):
     envioJogador = jogadores[idJogadorVez][socket].recv(tamanhoResposta)
     linha, coluna = pickle.loads(envioJogador)
     acertou = jogadores[idJogadorEsperando][jogador].verificarSeTiroAcertou(linha, coluna)
-    print(acertou)
     if acertou:
         enviarMensagemParaAmbosJogadores((True, linha, coluna))
     else:
         enviarMensagemParaAmbosJogadores((False, linha, coluna))
+
+def esperaJogadores(idJogador):
+    envioJogador = jogadores[idJogador][socket].recv(tamanhoResposta)
 
 esperaConexao(jogadorUm)
 esperaConexao(jogadorDois)
@@ -108,6 +111,34 @@ while True:
         turno = jogadorUm
 
     #verificar se há vencedor
+    if jogadores[jogadorUm][jogador].partesAbatidas == acertosNecessarios:
+        print("Acabou")
+        mensagemJogadorUm = pickle.dumps((True, False))
+        mensagemJogadorDois = pickle.dumps((True, True))
+        
+        enviarMensagemParaJogador(jogadorUm, mensagemJogadorUm)
+        enviarMensagemParaJogador(jogadorDois, mensagemJogadorDois)
+        break
+
+    elif jogadores[jogadorDois][jogador].partesAbatidas == acertosNecessarios:
+        print("Acabou")
+        mensagemJogadorUm = pickle.dumps((True, True))
+        mensagemJogadorDois = pickle.dumps((True, False))
+        
+        enviarMensagemParaJogador(jogadorUm, mensagemJogadorUm)
+        enviarMensagemParaJogador(jogadorDois, mensagemJogadorDois)
+        break
+    else:
+        enviarMensagemParaAmbosJogadores((False, False))
+
+        t1 = Thread(target=esperaJogadores, args=(jogadorUm,))
+        t2 = Thread(target=esperaJogadores, args=(jogadorDois,))
+
+        t1.start()
+        t2.start()
+
+        t1.join()
+        t2.join()
 
 jogadores[jogadorUm][socket].close()
 jogadores[jogadorDois][socket].close()

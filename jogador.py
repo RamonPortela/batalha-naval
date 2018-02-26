@@ -6,11 +6,12 @@ class Jogador:
         self.campo = [[0 for x in range(10)] for y in range(10)]
         self.tiros = []
         self.naviosAbatidos = []
+        self.partesAbatidas = 0
 
 
     def verificarSeTiroAcertou(self, linha, coluna):
-        print(linha, coluna)
-        if(self.campo[linha][coluna] == 1):            
+        if(self.campo[linha][coluna] == 1):
+            self.partesAbatidas += 1            
             return True
         else:
             return False
