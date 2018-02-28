@@ -10,7 +10,7 @@ tamanhoResposta = 1024
 msgSuaVez = "Sua vez de jogar"
 msgAguardeVez = "Aguarde sua rodada"
 
-navios = {0: Navio('Porta-Avião', 1, None), 1: Navio('Navio-Tanque', 4, None), 2: Navio('Navio-Tanque', 4, None), 3: Navio('Contra Torpedeiro', 3, None), 4: Navio('Contra Torpedeiro', 3, None), 5: Navio('Contra Torpedeiro', 3, None), 6: Navio('Submarino', 2, None), 7: Navio('Submarino', 2, None), 8: Navio('Submarino', 2, None), 9: Navio('Submarino', 2, None)}
+navios = {0: Navio('Porta-Avião', 5, None), 1: Navio('Navio-Tanque', 4, None), 2: Navio('Navio-Tanque', 4, None), 3: Navio('Contra Torpedeiro', 3, None), 4: Navio('Contra Torpedeiro', 3, None), 5: Navio('Contra Torpedeiro', 3, None), 6: Navio('Submarino', 2, None), 7: Navio('Submarino', 2, None), 8: Navio('Submarino', 2, None), 9: Navio('Submarino', 2, None)}
 
 def desenharMatriz():
     print("   ", " ".join([str(a) for a in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]]))
@@ -99,7 +99,7 @@ s.connect(('localhost', 12397))
 ReceberEPrintarMensagem()
 ReceberEPrintarMensagem()
 
-for i in range(0, 1):
+for i in range(0, 5):
     while True:
         posicao = executarPosicionarBarco(navios[i])
         b = pickle.dumps(posicao)

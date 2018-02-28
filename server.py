@@ -7,7 +7,7 @@ import time
 import pickle
 
 socket_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host= "localhost"
+host= "10.2.12.251"
 porta = 12397
 socket_servidor.bind((host, porta))
 socket_servidor.listen()
@@ -25,7 +25,7 @@ addr = 1
 jogador = 2
 ip = 0
 porta = 1
-totalNaviosPorJogador = 1
+totalNaviosPorJogador = 5
 tamanhoResposta = 1024
 acertosNecessarios = 1
 
@@ -112,18 +112,18 @@ while True:
 
     #verificar se há vencedor
     if jogadores[jogadorUm][jogador].partesAbatidas == acertosNecessarios:
-        print("Acabou")
-        mensagemJogadorUm = pickle.dumps((True, False))
-        mensagemJogadorDois = pickle.dumps((True, True))
+        print("Acabou1")
+        mensagemJogadorUm = (True, False)
+        mensagemJogadorDois = (True, True)
         
         enviarMensagemParaJogador(jogadorUm, mensagemJogadorUm)
         enviarMensagemParaJogador(jogadorDois, mensagemJogadorDois)
         break
 
     elif jogadores[jogadorDois][jogador].partesAbatidas == acertosNecessarios:
-        print("Acabou")
-        mensagemJogadorUm = pickle.dumps((True, True))
-        mensagemJogadorDois = pickle.dumps((True, False))
+        print("Acabou2")
+        mensagemJogadorUm = (True, True)
+        mensagemJogadorDois = (True, False)
         
         enviarMensagemParaJogador(jogadorUm, mensagemJogadorUm)
         enviarMensagemParaJogador(jogadorDois, mensagemJogadorDois)
