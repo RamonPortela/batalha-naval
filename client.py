@@ -2,6 +2,7 @@ import pickle
 import socket
 from navio import Navio
 import time
+from playsound import playsound
 
 tiros = {}
 matriz = [[0 for x in range(10)] for y in range(10)]
@@ -99,7 +100,7 @@ s.connect(('localhost', 12397))
 ReceberEPrintarMensagem()
 ReceberEPrintarMensagem()
 
-for i in range(0, 5):
+for i in range(0, 3):
     while True:
         posicao = executarPosicionarBarco(navios[i])
         b = pickle.dumps(posicao)
@@ -126,9 +127,11 @@ while True:
         acertou, linha, coluna = pickle.loads(resposta)
         if acertou:
             matriz[linha][coluna] = 'X'
+            playsound("barrel-exploding-soundbible.mp3")
             print("Opa fion, acertou")
         else:
             matriz[linha][coluna] = '~'
+            playsound("faustao-errou.mp3")
             print("Errou!!!!")
 
         desenharMatriz()

@@ -7,7 +7,7 @@ import time
 import pickle
 
 socket_servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host= "10.2.12.251"
+host= "localhost"
 porta = 12397
 socket_servidor.bind((host, porta))
 socket_servidor.listen()
@@ -25,9 +25,9 @@ addr = 1
 jogador = 2
 ip = 0
 porta = 1
-totalNaviosPorJogador = 5
+totalNaviosPorJogador = 3
 tamanhoResposta = 1024
-acertosNecessarios = 1
+acertosNecessarios = 13
 
 jogadores = {}
 
